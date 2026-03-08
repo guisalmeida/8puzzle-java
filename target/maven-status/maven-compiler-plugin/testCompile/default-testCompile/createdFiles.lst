@@ -1,0 +1,7 @@
+br/ies/aps/jogooito/modelo/DAO/TesteConexao.class
+br/ies/aps/jogooito/modelo/DAO/TesteJogadorDAO.class
+br/ies/aps/jogooito/modelo/testeTabuleiro.class
+br/ies/aps/jogooito/modelo/DAO/TesteTabuleiroDAO.class
+br/ies/aps/jogooito/modelo/DAO/TesteSalvaNovoJogoBanco.class
+br/ies/aps/jogooito/modelo/TesteCampo.class
+br/ies/aps/jogooito/controle/TesteControleTabuleiro.class

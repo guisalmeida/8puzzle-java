@@ -12,7 +12,7 @@ public class TesteSalvaNovoJogoBanco {
 	@Test
 	public void testaSalvarNovoJogoBanco() throws SQLException {
 		Tabuleiro tabuleiro = new Tabuleiro();
-		Jogador jogador = new Jogador("Gui");		
+		Jogador jogador = new Jogador("Gui");
 		
 		SalvaNovoJogoBancoDAO salvarNovoJogoBancoDAO = new SalvaNovoJogoBancoDAO(tabuleiro, jogador);
 		salvarNovoJogoBancoDAO.salvar();
