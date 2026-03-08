@@ -28,7 +28,8 @@ replay_pid*
 Thumbs.db
 
 # ???
-!*.jar
+target/*
+!target/*.jar
 .project
 .settings
 .classpath
