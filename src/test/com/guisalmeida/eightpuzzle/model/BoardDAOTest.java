@@ -1,4 +1,4 @@
-package com.guisalmeida.eightpuzzle.model.DAO;
+package com.guisalmeida.eightpuzzle.model;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -8,18 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.guisalmeida.eightpuzzle.model.BoardDAO;
-import com.guisalmeida.eightpuzzle.model.ConnectionFactory;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.guisalmeida.eightpuzzle.model.Board;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BoardDAOTest {
 	private ConnectionFactory mockConnectionFactory;
     private PreparedStatement mockStatement;
 
-    @Before
+    @BeforeEach
 	public void setup() throws SQLException {
 		mockConnectionFactory = mock(ConnectionFactory.class);
         Connection mockConnection = mock(Connection.class);

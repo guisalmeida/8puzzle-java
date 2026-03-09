@@ -1,4 +1,4 @@
-package com.guisalmeida.eightpuzzle.model.DAO;
+package com.guisalmeida.eightpuzzle.model;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -8,22 +8,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.guisalmeida.eightpuzzle.model.ConnectionFactory;
-import com.guisalmeida.eightpuzzle.model.PlayerDAO;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import com.guisalmeida.eightpuzzle.model.Player;
-
-public class PlayerDAOTest {
+public class SaveNewGameDAOTest {
 	private ConnectionFactory mockConnectionFactory;
-    private PreparedStatement mockStatement;
 
-    @Before
+    @BeforeEach
 	public void setup() throws SQLException {
 		mockConnectionFactory = mock(ConnectionFactory.class);
         Connection mockConnection = mock(Connection.class);
-		mockStatement = mock(PreparedStatement.class);
+        PreparedStatement mockStatement = mock(PreparedStatement.class);
         ResultSet mockResultSet = mock(ResultSet.class);
 
 		when(mockConnectionFactory.getConnection()).thenReturn(mockConnection);
@@ -34,13 +29,14 @@ public class PlayerDAOTest {
 	}
 
 	@Test
-	public void shouldInsertNewPlayer() throws SQLException {
+	public void shouldSaveNewGame() {
+		Board board = new Board();
 		Player player = new Player("Gui");
-		PlayerDAO playerDAO = new PlayerDAO(player, mockConnectionFactory);
 
-		playerDAO.insert(8);
+		SaveNewGameDAO saveNewGameDAO = new SaveNewGameDAO(board, player, mockConnectionFactory);
+		saveNewGameDAO.save();
 
-		assertNotNull(playerDAO.getId());
-		verify(mockStatement).execute();
+		assertNotNull(saveNewGameDAO.getBoardId());
+		assertNotNull(saveNewGameDAO.getPlayerId());
 	}
 }

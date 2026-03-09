@@ -2,8 +2,8 @@ package com.guisalmeida.eightpuzzle.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TileTest {
 	private Board board;
@@ -14,7 +14,7 @@ public class TileTest {
 	private Tile tileLeft;
 	private Tile tileDown;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		board = new Board();
 

@@ -20,11 +20,10 @@ import com.guisalmeida.eightpuzzle.view.swing.button.MoveUpButton;
 import com.guisalmeida.eightpuzzle.view.swing.button.MoveRightButton;
 import com.guisalmeida.eightpuzzle.view.swing.button.MoveLeftButton;
 
-@SuppressWarnings("serial")
 public class ControlView extends JPanel implements KeyListener, BoardObserver {
-	private Board board;
-	private Player player;
-	private BoardView boardView;
+	private final Board board;
+	private final Player player;
+	private final BoardView boardView;
 	private JLabel movesLabel;
 	private MoveUpButton buttonUp;
 	private MoveDownButton buttonDown;

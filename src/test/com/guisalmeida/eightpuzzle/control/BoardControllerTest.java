@@ -3,13 +3,13 @@ package com.guisalmeida.eightpuzzle.control;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.guisalmeida.eightpuzzle.model.Board;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BoardControllerTest {
 	private BoardController boardController;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		boardController = new BoardController(new Board());
 	}
