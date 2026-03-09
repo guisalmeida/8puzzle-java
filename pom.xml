@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>br.ies.aps</groupId>
-    <artifactId>8puzzle</artifactId>
+    <groupId>com.guisalmeida</groupId>
+    <artifactId>eightpuzzle</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -35,7 +35,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -46,9 +45,6 @@
     </dependencies>
 
     <build>
-        <!-- Source and test directories matching project layout -->
-        <sourceDirectory>src/main</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
 
         <plugins>
             <!-- Compiler Plugin -->
