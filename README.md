@@ -15,7 +15,7 @@ The 8 Puzzle Game, also known as the sliding puzzle, is a classic puzzle game co
 
 ## Objectives
 
-- Apply object-oriented concepts taught in class to build software, such as:
+- Apply object-oriented concepts to build software, such as:
   - Abstraction
   - Encapsulation
   - Composition
