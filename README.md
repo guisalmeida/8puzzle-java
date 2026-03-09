@@ -29,9 +29,9 @@ The 8 Puzzle Game, also known as the sliding puzzle, is a classic puzzle game co
 - Persist the game state in a PostgreSQL database.
 
 ## Technologies
-**Java:** the primary programming language for the application.  
-**JDBC:** for database connectivity and executing SQL queries.  
-**PostgreSQL:** relational database for storing game states and player profiles.  
-**Maven:** project build and dependency management.  
-**JUnit:** testing frameworks for unit and integration tests.  
-**Swing:** for building the graphical user interface.  
+- **Java:** the primary programming language for the application.  
+- **JDBC:** for database connectivity and executing SQL queries.  
+- **PostgreSQL:** relational database for storing game states and player profiles.  
+- **Maven:** project build and dependency management.  
+- **JUnit:** testing frameworks for unit and integration tests.  
+- **Swing:** for building the graphical user interface.  
