@@ -1,0 +1,38 @@
+name: Build & Upload 8-Puzzle JAR
+
+on:
+  push:
+    branches: [ master ]
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build fat JAR
+        run: mvn package -DskipTests --batch-mode
+
+      - name: Upload JAR as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eightpuzzle-jar
+          path: target/eightpuzzle-1.0-SNAPSHOT.jar
+
+      - name: Attach JAR to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/eightpuzzle-1.0-SNAPSHOT.jar
+
