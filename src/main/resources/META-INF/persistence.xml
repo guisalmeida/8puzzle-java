@@ -12,11 +12,10 @@
         <class>com.guisalmeida.eightpuzzle.model.Player</class>
 
         <properties>
-            <!-- Connection — overridden at runtime by PersistenceManager -->
+            <!-- Connection — overridden at runtime by PersistenceManager from application.properties -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url"
-                      value="jdbc:postgresql://aws-0-eu-west-3.pooler.supabase.com:5432/postgres"/>
-            <property name="javax.persistence.jdbc.user" value="postgres.rlngjoyfvmxadrncjiqz"/>
+            <property name="javax.persistence.jdbc.url" value=""/>
+            <property name="javax.persistence.jdbc.user" value=""/>
             <property name="javax.persistence.jdbc.password" value=""/>
 
             <!-- Hibernate -->

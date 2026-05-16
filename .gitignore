@@ -50,3 +50,6 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 *.iml
+
+# Sensitive config
+src/main/resources/application.properties
