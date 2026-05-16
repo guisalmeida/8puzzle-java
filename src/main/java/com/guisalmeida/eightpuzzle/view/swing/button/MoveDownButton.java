@@ -2,16 +2,16 @@ package com.guisalmeida.eightpuzzle.view.swing.button;
 
 import java.awt.event.ActionEvent;
 
-import com.guisalmeida.eightpuzzle.model.Board;
+import com.guisalmeida.eightpuzzle.control.BoardController;
 import com.guisalmeida.eightpuzzle.model.Player;
 import com.guisalmeida.eightpuzzle.view.swing.view.ControlView;
 import com.guisalmeida.eightpuzzle.view.swing.view.BoardView;
 
 public class MoveDownButton extends AbstractMoveButton {
 
-	public MoveDownButton(String direction, Board board,
+	public MoveDownButton(String direction, BoardController boardController,
 		BoardView boardView, ControlView controlView, Player player) {
-		super(direction, board, boardView, controlView, player);
+		super(direction, boardController, boardView, controlView, player);
 	}
 
 	@Override
@@ -21,9 +21,8 @@ public class MoveDownButton extends AbstractMoveButton {
 
 	@Override
 	public void updateBoardState() {
-		this.getBoardController().moveDown();
-		this.getBoardView().updateBoardView(this.getBoard());
-		Integer moves = this.getPlayer().getMoves();
-		this.getPlayer().setMoves(moves + 1);
+		getBoardController().moveDown();
+		getBoardView().updateBoardView(getBoardController().getBoard());
+		getPlayer().setMoves(getPlayer().getMoves() + 1);
 	}
 }

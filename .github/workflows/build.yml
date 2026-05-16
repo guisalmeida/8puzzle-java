@@ -21,6 +21,14 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Create application.properties from secrets
+        run: |
+          cat <<EOF > src/main/resources/application.properties
+          db_password=${{ secrets.DB_PASSWORD }}
+          db_url=${{ secrets.DB_URL }}
+          db_username=${{ secrets.DB_USERNAME }}
+          EOF
+
       - name: Build fat JAR
         run: mvn package -DskipTests --batch-mode
 
@@ -35,4 +43,3 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: target/eightpuzzle-1.0-SNAPSHOT.jar
-

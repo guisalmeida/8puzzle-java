@@ -1,42 +1,41 @@
 package com.guisalmeida.eightpuzzle.model;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class SaveNewGameDAOTest {
-	private ConnectionFactory mockConnectionFactory;
+	private static EntityManagerFactory emf;
 
-    @BeforeEach
-	public void setup() throws SQLException {
-		mockConnectionFactory = mock(ConnectionFactory.class);
-        Connection mockConnection = mock(Connection.class);
-        PreparedStatement mockStatement = mock(PreparedStatement.class);
-        ResultSet mockResultSet = mock(ResultSet.class);
+	@BeforeAll
+	public static void setupFactory() {
+		emf = Persistence.createEntityManagerFactory("eight-puzzle-pu");
+	}
 
-		when(mockConnectionFactory.getConnection()).thenReturn(mockConnection);
-		when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
-		when(mockStatement.getResultSet()).thenReturn(mockResultSet);
-		when(mockResultSet.next()).thenReturn(true);
-		when(mockResultSet.getInt("id")).thenReturn(1);
+	@AfterAll
+	public static void closeFactory() {
+		if (emf != null) {
+			emf.close();
+		}
 	}
 
 	@Test
 	public void shouldSaveNewGame() {
+		EntityManager em = emf.createEntityManager();
 		Board board = new Board();
 		Player player = new Player("Gui");
 
-		SaveNewGameDAO saveNewGameDAO = new SaveNewGameDAO(board, player, mockConnectionFactory);
+		SaveNewGameDAO saveNewGameDAO = new SaveNewGameDAO(board, player, em);
 		saveNewGameDAO.save();
 
 		assertNotNull(saveNewGameDAO.getBoardId());
 		assertNotNull(saveNewGameDAO.getPlayerId());
+		em.close();
 	}
 }
