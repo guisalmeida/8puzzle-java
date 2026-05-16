@@ -4,7 +4,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,12 +90,9 @@ public class ControlView extends JPanel implements KeyListener, BoardObserver {
 		if (board.checkGameOver()) {
 			finishGame(player.getMoves() + 1);
 			player.setWinner(true);
-			PlayerDAO playerDAO = new PlayerDAO(player);
-			try {
-				playerDAO.update(player.getId());
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			PlayerDAO playerDAO = new PlayerDAO();
+			playerDAO.update(player);
+			playerDAO.close();
 		} else {
 			updateMoves(player.getMoves() + 1);
 		}
@@ -135,9 +131,11 @@ public class ControlView extends JPanel implements KeyListener, BoardObserver {
 				buttonLeft.updateBoardState();
 			}
 		});
-		
-		// TODO check if key is in the map before running
-		keyMap.get(event.getKeyCode()).run();
+
+		Runnable action = keyMap.get(event.getKeyCode());
+		if (action != null) {
+			action.run();
+		}
 	}
 
 	@Override

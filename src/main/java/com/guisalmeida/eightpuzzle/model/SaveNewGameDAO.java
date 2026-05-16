@@ -1,45 +1,46 @@
 package com.guisalmeida.eightpuzzle.model;
 
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 public class SaveNewGameDAO {
 	private final Board board;
 	private final Player player;
-	private final ConnectionFactory connectionFactory;
-	private Integer boardId;
-	private Integer playerId;
+	private final EntityManager entityManager;
 
 	public SaveNewGameDAO(Board board, Player player) {
-		this(board, player, new ConnectionFactory());
+		this(board, player, PersistenceManager.getEntityManager());
 	}
 
-	public SaveNewGameDAO(Board board, Player player, ConnectionFactory connectionFactory) {
+	public SaveNewGameDAO(Board board, Player player, EntityManager entityManager) {
 		this.board = board;
 		this.player = player;
-		this.connectionFactory = connectionFactory;
+		this.entityManager = entityManager;
 	}
 
 	public void save() {
-		BoardDAO boardDAO = new BoardDAO(this.board, connectionFactory);
-
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			boardDAO.insert();
-			boardId = boardDAO.getId();
+			transaction.begin();
 
-			PlayerDAO playerDAO = new PlayerDAO(this.player, connectionFactory);
-			playerDAO.insert(boardId);
-			playerId = playerDAO.getId();
+			entityManager.persist(board);
+			player.setBoard(board);
+			entityManager.persist(player);
 
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			transaction.commit();
+		} catch (RuntimeException e) {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			throw e;
 		}
 	}
 
 	public Integer getBoardId() {
-		return boardId;
+		return board.getId();
 	}
 	
 	public Integer getPlayerId() {
-		return playerId;
+		return player.getId();
 	}
 }

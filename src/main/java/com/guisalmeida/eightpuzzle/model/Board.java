@@ -1,19 +1,23 @@
 package com.guisalmeida.eightpuzzle.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "board")
+@Access(AccessType.PROPERTY)
 public class Board {
 	private Tile pointer;
-	private Tile tileCenter;
-	private Tile tileCenterRight;
-	private Tile tileCenterLeft;
-	private Tile tileBottomCenter;
-	private Tile tileBottomRight;
-	private Tile tileBottomLeft;
-	private Tile tileTopCenter;
-	private Tile tileTopRight;
-	private Tile tileTopLeft;
+	private Tile tileCenterTile;
+	private Tile tileCenterRightTile;
+	private Tile tileCenterLeftTile;
+	private Tile tileBottomCenterTile;
+	private Tile tileBottomRightTile;
+	private Tile tileBottomLeftTile;
+	private Tile tileTopCenterTile;
+	private Tile tileTopRightTile;
+	private Tile tileTopLeftTile;
 
 	private Integer id;
 
@@ -21,6 +25,11 @@ public class Board {
 
 	public Board() {
 		generateTiles();
+	}
+
+	@Transient
+	public List<BoardObserver> getObservers() {
+		return observers;
 	}
 
 	public void registerObserver(BoardObserver observer) {
@@ -33,6 +42,7 @@ public class Board {
 		}
 	}
 
+	@Transient
 	public Tile getPointer() {
 		return pointer;
 	}
@@ -41,78 +51,89 @@ public class Board {
 		this.pointer = pointer;
 	}
 
+	@Column(name = "tile_center")
 	public Integer getTileCenter() {
-		return tileCenter.getValue();
+		return tileCenterTile.getValue();
 	}
 	
 	public void setTileCenter(Integer value) {
-		this.tileCenter.setValue(value);
+		this.tileCenterTile.setValue(value);
 	}
 
+	@Column(name = "tile_center_right")
 	public Integer getTileCenterRight() {
-		return tileCenterRight.getValue();
+		return tileCenterRightTile.getValue();
 	}
 	
 	public void setTileCenterRight(Integer value) {
-		this.tileCenterRight.setValue(value);
+		this.tileCenterRightTile.setValue(value);
 	}
 
+	@Column(name = "tile_center_left")
 	public Integer getTileCenterLeft() {
-		return tileCenterLeft.getValue();
+		return tileCenterLeftTile.getValue();
 	}
 
 	public void setTileCenterLeft(Integer value) {
-		this.tileCenterLeft.setValue(value);
+		this.tileCenterLeftTile.setValue(value);
 	}
 	
+	@Column(name = "tile_bottom_center")
 	public Integer getTileBottomCenter() {
-		return tileBottomCenter.getValue();
+		return tileBottomCenterTile.getValue();
 	}
 
 	public void setTileBottomCenter(Integer value) {
-		this.tileBottomCenter.setValue(value);
+		this.tileBottomCenterTile.setValue(value);
 	}
 	
+	@Column(name = "tile_bottom_right")
 	public Integer getTileBottomRight() {
-		return tileBottomRight.getValue();
+		return tileBottomRightTile.getValue();
 	}
 
 	public void setTileBottomRight(Integer value) {
-		this.tileBottomRight.setValue(value);
+		this.tileBottomRightTile.setValue(value);
 	}
 	
+	@Column(name = "tile_bottom_left")
 	public Integer getTileBottomLeft() {
-		return tileBottomLeft.getValue();
+		return tileBottomLeftTile.getValue();
 	}
 
 	public void setTileBottomLeft(Integer value) {
-		this.tileBottomLeft.setValue(value);
+		this.tileBottomLeftTile.setValue(value);
 	}
 
+	@Column(name = "tile_top_center")
 	public Integer getTileTopCenter() {
-		return tileTopCenter.getValue();
+		return tileTopCenterTile.getValue();
 	}
 	
 	public void setTileTopCenter(Integer value) {
-		this.tileTopCenter.setValue(value);
+		this.tileTopCenterTile.setValue(value);
 	}
 	
+	@Column(name = "tile_top_right")
 	public Integer getTileTopRight() {
-		return tileTopRight.getValue();
+		return tileTopRightTile.getValue();
 	}
 
 	public void setTileTopRight(Integer value) {
-		this.tileTopRight.setValue(value);
+		this.tileTopRightTile.setValue(value);
 	}
 	
+	@Column(name = "tile_top_left")
 	public Integer getTileTopLeft() {
-		return tileTopLeft.getValue();
+		return tileTopLeftTile.getValue();
 	}
 
 	public void setTileTopLeft(Integer value) {
-		this.tileTopLeft.setValue(value);
+		this.tileTopLeftTile.setValue(value);
 	}
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer getId() {
 		return id;
 	}
@@ -122,53 +143,53 @@ public class Board {
 	}
 
 	public void generateTiles() {
-		tileTopLeft = new Tile(7, this);
-		tileTopCenter = new Tile(2, this);
-		tileTopRight = new Tile(4, this);
-		tileCenterLeft = new Tile(5, this);
-		tileCenter = new Tile(0, this);
-		tileCenterRight = new Tile(6, this);
-		tileBottomLeft = new Tile(8, this);
-		tileBottomCenter = new Tile(3, this);
-		tileBottomRight = new Tile(1, this);
+		tileTopLeftTile = new Tile(7, this);
+		tileTopCenterTile = new Tile(2, this);
+		tileTopRightTile = new Tile(4, this);
+		tileCenterLeftTile = new Tile(5, this);
+		tileCenterTile = new Tile(0, this);
+		tileCenterRightTile = new Tile(6, this);
+		tileBottomLeftTile = new Tile(8, this);
+		tileBottomCenterTile = new Tile(3, this);
+		tileBottomRightTile = new Tile(1, this);
 
 		linkNeighbors();
-		setPointer(tileCenter);
+		setPointer(tileCenterTile);
 	}
 
 	private void linkNeighbors() {
-		tileTopLeft.setDown(tileCenterLeft);
-		tileTopLeft.setRight(tileTopCenter);
+		tileTopLeftTile.setDown(tileCenterLeftTile);
+		tileTopLeftTile.setRight(tileTopCenterTile);
 
-		tileTopCenter.setDown(tileCenter);
-		tileTopCenter.setRight(tileTopRight);
-		tileTopCenter.setLeft(tileTopLeft);
+		tileTopCenterTile.setDown(tileCenterTile);
+		tileTopCenterTile.setRight(tileTopRightTile);
+		tileTopCenterTile.setLeft(tileTopLeftTile);
 
-		tileTopRight.setDown(tileCenterRight);
-		tileTopRight.setLeft(tileTopCenter);
+		tileTopRightTile.setDown(tileCenterRightTile);
+		tileTopRightTile.setLeft(tileTopCenterTile);
 
-		tileCenterLeft.setRight(tileCenter);
-		tileCenterLeft.setDown(tileBottomLeft);
-		tileCenterLeft.setUp(tileTopLeft);
+		tileCenterLeftTile.setRight(tileCenterTile);
+		tileCenterLeftTile.setDown(tileBottomLeftTile);
+		tileCenterLeftTile.setUp(tileTopLeftTile);
 
-		tileCenter.setDown(tileBottomCenter);
-		tileCenter.setUp(tileTopCenter);
-		tileCenter.setRight(tileCenterRight);
-		tileCenter.setLeft(tileCenterLeft);
+		tileCenterTile.setDown(tileBottomCenterTile);
+		tileCenterTile.setUp(tileTopCenterTile);
+		tileCenterTile.setRight(tileCenterRightTile);
+		tileCenterTile.setLeft(tileCenterLeftTile);
 
-		tileCenterRight.setDown(tileBottomRight);
-		tileCenterRight.setUp(tileTopRight);
-		tileCenterRight.setLeft(tileCenter);
+		tileCenterRightTile.setDown(tileBottomRightTile);
+		tileCenterRightTile.setUp(tileTopRightTile);
+		tileCenterRightTile.setLeft(tileCenterTile);
 
-		tileBottomLeft.setUp(tileCenterLeft);
-		tileBottomLeft.setRight(tileBottomCenter);
+		tileBottomLeftTile.setUp(tileCenterLeftTile);
+		tileBottomLeftTile.setRight(tileBottomCenterTile);
 
-		tileBottomCenter.setUp(tileCenter);
-		tileBottomCenter.setRight(tileBottomRight);
-		tileBottomCenter.setLeft(tileBottomLeft);
+		tileBottomCenterTile.setUp(tileCenterTile);
+		tileBottomCenterTile.setRight(tileBottomRightTile);
+		tileBottomCenterTile.setLeft(tileBottomLeftTile);
 
-		tileBottomRight.setUp(tileCenterRight);
-		tileBottomRight.setLeft(tileBottomCenter);
+		tileBottomRightTile.setUp(tileCenterRightTile);
+		tileBottomRightTile.setLeft(tileBottomCenterTile);
 	}
 	
 	public Boolean checkGameOver() {
@@ -186,10 +207,10 @@ public class Board {
 	@Override
 	public String toString() {
 		return String.format("|%d %d %d|\n|%d %d %d|\n|%d %d %d|", 
-				tileTopLeft.getValue(), tileTopCenter.getValue(),
-				tileTopRight.getValue(), tileCenterLeft.getValue(),
-				tileCenter.getValue(), tileCenterRight.getValue(),
-				tileBottomLeft.getValue(), tileBottomCenter.getValue(),
-				tileBottomRight.getValue());
+				tileTopLeftTile.getValue(), tileTopCenterTile.getValue(),
+				tileTopRightTile.getValue(), tileCenterLeftTile.getValue(),
+				tileCenterTile.getValue(), tileCenterRightTile.getValue(),
+				tileBottomLeftTile.getValue(), tileBottomCenterTile.getValue(),
+				tileBottomRightTile.getValue());
 	}
 }

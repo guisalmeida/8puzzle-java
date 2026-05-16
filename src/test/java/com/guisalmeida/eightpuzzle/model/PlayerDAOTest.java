@@ -1,42 +1,46 @@
 package com.guisalmeida.eightpuzzle.model;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class PlayerDAOTest {
-	private ConnectionFactory mockConnectionFactory;
-    private PreparedStatement mockStatement;
+	private static EntityManagerFactory emf;
 
-    @BeforeEach
-	public void setup() throws SQLException {
-		mockConnectionFactory = mock(ConnectionFactory.class);
-        Connection mockConnection = mock(Connection.class);
-		mockStatement = mock(PreparedStatement.class);
-        ResultSet mockResultSet = mock(ResultSet.class);
+	@BeforeAll
+	public static void setupFactory() {
+		emf = Persistence.createEntityManagerFactory("eight-puzzle-pu");
+	}
 
-		when(mockConnectionFactory.getConnection()).thenReturn(mockConnection);
-		when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
-		when(mockStatement.getResultSet()).thenReturn(mockResultSet);
-		when(mockResultSet.next()).thenReturn(true);
-		when(mockResultSet.getInt("id")).thenReturn(1);
+	@AfterAll
+	public static void closeFactory() {
+		if (emf != null) {
+			emf.close();
+		}
 	}
 
 	@Test
-	public void shouldInsertNewPlayer() throws SQLException {
+	public void shouldInsertNewPlayer() {
+		EntityManager em = emf.createEntityManager();
+
+		// First persist a board (needed for FK)
+		BoardDAO boardDAO = new BoardDAO(em);
+		Board board = new Board();
+		boardDAO.insert(board);
+
+		// Now persist the player linked to the board
+		PlayerDAO playerDAO = new PlayerDAO(em);
 		Player player = new Player("Gui");
-		PlayerDAO playerDAO = new PlayerDAO(player, mockConnectionFactory);
+		player.setBoard(board);
+		playerDAO.insert(player);
 
-		playerDAO.insert(8);
-
-		assertNotNull(playerDAO.getId());
-		verify(mockStatement).execute();
+		assertNotNull(player.getId());
+		em.close();
 	}
 }

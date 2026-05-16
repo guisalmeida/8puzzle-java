@@ -3,16 +3,17 @@ package com.guisalmeida.eightpuzzle.view.swing.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.guisalmeida.eightpuzzle.control.BoardController;
 import com.guisalmeida.eightpuzzle.model.Player;
 import com.guisalmeida.eightpuzzle.model.Board;
+import com.guisalmeida.eightpuzzle.model.BoardDAO;
 import com.guisalmeida.eightpuzzle.model.PlayerDAO;
 import com.guisalmeida.eightpuzzle.model.SaveNewGameDAO;
-import com.guisalmeida.eightpuzzle.model.BoardDAO;
+import com.guisalmeida.eightpuzzle.model.PersistenceManager;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -23,14 +24,15 @@ public class MainWindow extends JFrame {
 		String playerName = JOptionPane.showInputDialog("Enter your name to play:");
 		player = new Player(playerName);
 		board = new Board();
-		setupLayout(this.board);
+		BoardController boardController = new BoardController(board);
+		setupLayout(boardController);
 		saveNewGame(this.board);
 		setupCloseHandler(this.board, this.player);
 	}
 
-	private void setupLayout(Board board) {
-		BoardView boardView = new BoardView(board);
-		ControlView controlView = new ControlView(board, boardView, player);
+	private void setupLayout(BoardController boardController) {
+		BoardView boardView = new BoardView(boardController.getBoard());
+		ControlView controlView = new ControlView(boardController, boardView, player);
 		addKeyListener(controlView);
 
 		GridBagLayout gridBagLayout = (GridBagLayout) controlView.getLayout();
@@ -51,8 +53,6 @@ public class MainWindow extends JFrame {
 	private void saveNewGame(Board board) {
 		SaveNewGameDAO saveNewGame = new SaveNewGameDAO(board, player);
 		saveNewGame.save();
-		board.setId(saveNewGame.getBoardId());
-		player.setId(saveNewGame.getPlayerId());
 	}
 
 	private void setupCloseHandler(Board board, Player player) {
@@ -63,17 +63,18 @@ public class MainWindow extends JFrame {
 						"Are you sure you want to quit?", "Close window?",
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					try {
-						BoardDAO boardDAO = new BoardDAO(board);
-						PlayerDAO playerDAO = new PlayerDAO(player);
-						boardDAO.update(board.getId());
-						playerDAO.update(player.getId());
 
-						setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						System.exit(0);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+					BoardDAO boardDAO = new BoardDAO();
+					boardDAO.update(board);
+					boardDAO.close();
+
+					PlayerDAO playerDAO = new PlayerDAO();
+					playerDAO.update(player);
+					playerDAO.close();
+
+					PersistenceManager.close();
+					setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+					System.exit(0);
 				} else {
 					setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 				}
